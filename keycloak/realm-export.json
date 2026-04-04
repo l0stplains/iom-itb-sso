@@ -1,0 +1,231 @@
+{
+  "id": "iom-itb-sso",
+  "realm": "iom-itb-sso",
+  "displayName": "IOM ITB SSO",
+  "displayNameHtml": " ",
+  "loginTheme": "iom-itb",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": false,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": false,
+  "permanentLockout": false,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "accessTokenLifespan": 300,
+  "accessTokenLifespanForImplicitFlow": 900,
+  "refreshTokenMaxReuse": 0,
+  "revokeRefreshToken": false,
+  "defaultSignatureAlgorithm": "RS256",
+  "roles": {
+    "realm": [
+      {
+        "name": "admin",
+        "description": "Administrator utama dengan akses penuh (CRUD) ke seluruh ekosistem aplikasi.",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "pengurus-bidang-1",
+        "description": "Pengurus Bidang I yang memiliki akses ke platform Web dashboard, ISSUMIT, dan Manajemen Informasi/OKI.",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "pengurus-bidang-2",
+        "description": "Pengurus Bidang II yang memiliki akses ke aplikasi Bankes dan OTA.",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "mahasiswa",
+        "description": "Pengguna mahasiswa dengan akses terbatas pada aplikasi OTA.",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "orang-tua-asuh",
+        "description": "Pengguna entitas Orang Tua Asuh dengan akses terbatas pada aplikasi Bankes.",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "volunteer-pewawancara",
+        "description": "Relawan pewawancara dengan akses spesifik pada aplikasi Bankes.",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "sekretariat",
+        "description": "Staf sekretariat dengan akses operasional pada aplikasi Sekretariat.",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "bendahara",
+        "description": "Staf bendahara dengan akses ke aplikasi Akunting.",
+        "composite": false,
+        "clientRole": false
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "frontend-1",
+      "name": "IOM Frontend",
+      "description": "Production frontend at iom.kirisame.jp.net",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "authorizationServicesEnabled": false,
+      "redirectUris": [
+        "https://iom.kirisame.jp.net/*"
+      ],
+      "webOrigins": [
+        "https://iom.kirisame.jp.net"
+      ],
+      "rootUrl": "https://iom.kirisame.jp.net",
+      "baseUrl": "https://iom.kirisame.jp.net",
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "https://iom.kirisame.jp.net/",
+        "oidc.ciba.grant.enabled": "false",
+        "backchannel.logout.session.required": "true",
+        "backchannel.logout.revoke.offline.tokens": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "backend-api-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.client.audience": "backend-api",
+            "access.token.claim": "true",
+            "id.token.claim": "false"
+          }
+        }
+      ]
+    },
+
+    {
+      "clientId": "backend-api",
+      "name": "Backend API",
+      "description": "Backend resource server, validates bearer tokens only",
+      "enabled": true,
+      "publicClient": false,
+      "bearerOnly": true,
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "authorizationServicesEnabled": false,
+      "redirectUris": [],
+      "webOrigins": []
+    }
+  ],
+  "users": [
+    {
+      "username": "testmahasiswa",
+      "email": "testmahasiswa@iom.itb.id",
+      "firstName": "Test",
+      "lastName": "User",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["mahasiswa"]
+    },
+    {
+      "username": "admin",
+      "email": "admin@iom-itb.id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["admin"]
+    }
+  ],
+  "identityProviders": [
+    {
+      "alias": "google",
+      "displayName": "Google",
+      "providerId": "google",
+      "enabled": false,
+      "trustEmail": true,
+      "storeToken": false,
+      "addReadTokenRoleOnCreate": false,
+      "firstBrokerLoginFlowAlias": "first broker login",
+      "config": {
+        "clientId": "REPLACE_WITH_GOOGLE_CLIENT_ID",
+        "clientSecret": "REPLACE_WITH_GOOGLE_CLIENT_SECRET",
+        "defaultScope": "openid email profile",
+        "useJwksUrl": "true",
+        "syncMode": "IMPORT"
+      }
+    }
+  ],
+  "identityProviderMappers": [
+    {
+      "name": "google-given-name",
+      "identityProviderAlias": "google",
+      "identityProviderMapper": "oidc-user-attribute-idp-mapper",
+      "config": {
+        "syncMode": "INHERIT",
+        "user.attribute": "firstName",
+        "claim": "given_name"
+      }
+    },
+    {
+      "name": "google-family-name",
+      "identityProviderAlias": "google",
+      "identityProviderMapper": "oidc-user-attribute-idp-mapper",
+      "config": {
+        "syncMode": "INHERIT",
+        "user.attribute": "lastName",
+        "claim": "family_name"
+      }
+    },
+    {
+      "name": "google-email",
+      "identityProviderAlias": "google",
+      "identityProviderMapper": "oidc-user-attribute-idp-mapper",
+      "config": {
+        "syncMode": "INHERIT",
+        "user.attribute": "email",
+        "claim": "email"
+      }
+    }
+  ],
+  "defaultDefaultClientScopes": [
+    "web-origins",
+    "acr",
+    "profile",
+    "roles",
+    "email"
+  ],
+  "defaultOptionalClientScopes": [
+    "offline_access",
+    "address",
+    "phone",
+    "microprofile-jwt"
+  ]
+}
