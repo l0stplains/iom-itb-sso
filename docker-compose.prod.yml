@@ -19,7 +19,9 @@ services:
       retries: 20
 
   keycloak:
-    image: quay.io/keycloak/keycloak:25.0
+    build:
+      context: ./keycloak
+      dockerfile: Dockerfile
     command: start --import-realm
     environment:
       KC_DB: postgres
@@ -34,9 +36,6 @@ services:
       KC_HTTP_ENABLED: "true"
       KC_HEALTH_ENABLED: "true"
       KC_LOG_LEVEL: INFO
-    volumes:
-      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
-      - ./keycloak/themes/iom-itb:/opt/keycloak/themes/iom-itb:ro
     depends_on:
       postgres:
         condition: service_healthy
